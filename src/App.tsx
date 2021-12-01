@@ -1,23 +1,20 @@
 import * as React from "react";
+import { Container } from "react-bootstrap";
+import "./App.css";
+import Header from "./components/header/Header";
+import MainWrapper from "./components/MainWrapper";
+import { PostProvider } from "./state/context";
 import "./App.css";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container>
+      <Header />
+      <hr />
+      <PostProvider>
+        <MainWrapper />
+      </PostProvider>
+    </Container>
   );
 }
 
