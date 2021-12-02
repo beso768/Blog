@@ -2,29 +2,14 @@ import * as React from "react";
 import {
   addPostServer,
   deletePostServer,
+  editPostServer,
   getPosts,
 } from "../services/httpService";
-import { PostTypes } from "./actionTypes";
-
-export interface Data {
-  id?: number;
-  title: string;
-  body: string;
-  imgUrl?: string;
-}
+import { PostTypes } from "./actionTypes/PostTypes";
+import postReducer, { Data, PostAction, PostState } from "./postReducer";
 
 type PostProviderProps = {
   children: React.ReactNode;
-};
-type PostState = {
-  error: boolean | string;
-  data: Data[] | [];
-  loading: boolean;
-};
-
-type PostAction = {
-  type: string;
-  payload: Data[] | [];
 };
 
 const PostsContext = React.createContext<{
@@ -35,28 +20,6 @@ const PostsContext = React.createContext<{
   dispatch: () => undefined,
 });
 
-function postReducer(posts: PostState, action: PostAction): PostState {
-  switch (action.type) {
-    case PostTypes.LOADING_DATA: {
-      return { error: false, data: [], loading: true };
-    }
-    case PostTypes.SUCCESSFULL_DATA: {
-      return { error: false, data: action.payload, loading: false };
-    }
-    case PostTypes.ERROR_DATA: {
-      return { error: true, data: [], loading: false };
-    }
-    case PostTypes.DELETE_POST: {
-      return { error: false, data: action.payload, loading: false };
-    }
-    case PostTypes.ADD_POST: {
-      return { error: false, data: action.payload, loading: false };
-    }
-    default: {
-      throw new Error(`Unsupported action type: ${action.type}`);
-    }
-  }
-}
 const initialState: PostState = { error: false, data: [], loading: false };
 
 export function PostProvider({ children }: PostProviderProps) {
@@ -83,42 +46,44 @@ export function usePost() {
     try {
       const response = await getPosts();
       dispatch({ type: PostTypes.SUCCESSFULL_DATA, payload: response });
-    } catch (error) {
-      dispatch({ type: PostTypes.ERROR_DATA, payload: [] });
+    } catch (e: any) {
+      dispatch({ type: PostTypes.ERROR_DATA, payload: e.message });
     }
   };
 
-  // This function firstly deletes post localy for faster UI and then delete  from server
   const deletePost = async (id: number) => {
     try {
       await deletePostServer(id);
       const updatedPosts: Data[] = posts.data.filter((post) => post.id !== id);
       dispatch({ type: PostTypes.SUCCESSFULL_DATA, payload: updatedPosts });
-    } catch (error) {
-      dispatch({ type: PostTypes.ERROR_DATA, payload: [] });
-    }
-  };
-
-  const editPost = async (newObj: Data) => {
-    try {
-      // updatePostServer(newObj);
-      const updatedPosts: Data[] = posts.data.map((post) =>
-        post.id === newObj.id ? (post = newObj) : post
-      );
-      dispatch({ type: PostTypes.SUCCESSFULL_DATA, payload: updatedPosts });
-    } catch (error) {
-      dispatch({ type: PostTypes.ERROR_DATA, payload: [] });
+    } catch (e: any) {
+      dispatch({ type: PostTypes.ERROR_DATA, payload: e.message });
     }
   };
 
   const addPost = async (newObj: Data) => {
     try {
-      newObj.id = Math.random();
-      const updatedPosts: Data[] = [newObj, ...posts.data];
-      dispatch({ type: PostTypes.SUCCESSFULL_DATA, payload: updatedPosts });
-      addPostServer(newObj);
-    } catch (error) {
-      dispatch({ type: PostTypes.ERROR_DATA, payload: [] });
+      const response = await addPostServer(newObj);
+      if (response) {
+        newObj.id = Math.random();
+        const updatedPosts: Data[] = [newObj, ...posts.data];
+        dispatch({ type: PostTypes.SUCCESSFULL_DATA, payload: updatedPosts });
+      }
+    } catch (e: any) {
+      dispatch({ type: PostTypes.ERROR_DATA, payload: e.message });
+    }
+  };
+  const editPost = async (newObj: Data) => {
+    try {
+      const response = await editPostServer(newObj);
+      if (response) {
+        const updatedPosts: Data[] = posts.data.map((post: Data) =>
+          post.id === newObj.id ? newObj : post
+        );
+        dispatch({ type: PostTypes.SUCCESSFULL_DATA, payload: updatedPosts });
+      }
+    } catch (e: any) {
+      dispatch({ type: PostTypes.ERROR_DATA, payload: e.message });
     }
   };
 

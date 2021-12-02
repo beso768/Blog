@@ -1,14 +1,14 @@
 import React from "react";
-import { Card, Button, Col } from "react-bootstrap";
+import { Button, Card, Col } from "react-bootstrap";
 import { usePost } from "../state/context";
 
 interface PostProps {
   data: { id: number; title: string; body: string; imgUrl?: string };
-  setModalShow: React.Dispatch<React.SetStateAction<boolean>>;
+  setModalShow: React.Dispatch<React.SetStateAction<any>>;
 }
 
-const Post: React.FC<PostProps> = ({ data, setModalShow }) => {
-  const { deletePost, editPost } = usePost();
+const Post: React.FC<PostProps> = ({ data, setModalShow }: PostProps) => {
+  const { deletePost } = usePost();
 
   function handleDelete(id: number): void {
     deletePost(id);
@@ -25,10 +25,23 @@ const Post: React.FC<PostProps> = ({ data, setModalShow }) => {
           <Card.Title>{data.title}</Card.Title>
           <Card.Text>{data.body}</Card.Text>
           <div className="buttons">
+            {/* Post won't actually stored on fake server so we cannot edit created posts  */}
             <Button
               variant="primary"
               className="me-2"
-              onClick={() => setModalShow(true)}
+              disabled={data.id >= 101}
+              onClick={() =>
+                setModalShow({
+                  show: true,
+                  post: {
+                    ...data,
+                    imgUrl:
+                      data.imgUrl ||
+                      `https://picsum.photos/500/400?random=${data.id}`,
+                  },
+                  mode: "edit",
+                })
+              }
             >
               Edit
             </Button>
