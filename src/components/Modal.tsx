@@ -1,8 +1,9 @@
 import React from "react";
-import { Button, Col, Form, Modal, Row } from "react-bootstrap";
-import { usePost } from "../state/context";
+import { Button, Form, Modal } from "react-bootstrap";
 import { ImodalShow } from "../App";
+import { usePost } from "../state/hooks/usePost";
 import { Data } from "../state/postReducer";
+import ModalFormField from "./ModalFormField";
 
 const initialState = {
   title: "",
@@ -21,6 +22,17 @@ export default function CenteredModal({
 }: CenteredModalProps) {
   const { addPost, editPost } = usePost();
   const [postObj, setPostObj] = React.useState<Data>(initialState);
+  const bootstrapModalProps = {
+    show: modalShow.show,
+    onHide: () => setModalShow({ ...modalShow, show: false }),
+  };
+
+  React.useEffect(() => {
+    if (modalShow.post) {
+      setPostObj(modalShow.post);
+    }
+    return () => setPostObj(initialState);
+  }, [modalShow]);
 
   function handleSubmit(e: { preventDefault: () => void }) {
     e.preventDefault();
@@ -33,20 +45,9 @@ export default function CenteredModal({
     setPostObj(initialState);
   }
 
-  const modalProps = {
-    show: modalShow.show,
-    onHide: () => setModalShow({ ...modalShow, show: false }),
-  };
-
-  React.useEffect(() => {
-    if (modalShow.post) {
-      setPostObj(modalShow.post);
-    }
-    return () => setPostObj(initialState);
-  }, [modalShow]);
   return (
     <Modal
-      {...modalProps}
+      {...bootstrapModalProps}
       size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
@@ -58,50 +59,14 @@ export default function CenteredModal({
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleSubmit}>
-          <Form.Group as={Row} className="mb-3" controlId="formTitle">
-            <Form.Label column sm="2">
-              title
-            </Form.Label>
-            <Col sm="10">
-              <Form.Control
-                required
-                value={postObj.title}
-                onChange={({ target }) =>
-                  setPostObj({ ...postObj, title: target.value })
-                }
-              />
-            </Col>
-          </Form.Group>
-
-          <Form.Group as={Row} className="mb-3" controlId="formPlaintextEmail">
-            <Form.Label column sm="2">
-              Image URL
-            </Form.Label>
-            <Col sm="10">
-              <Form.Control
-                required
-                value={postObj.imgUrl}
-                onChange={({ target }) =>
-                  setPostObj({ ...postObj, imgUrl: target.value })
-                }
-              />
-            </Col>
-          </Form.Group>
-
-          <Form.Group as={Row} className="mb-3" controlId="formPlaintextEmail">
-            <Form.Label column sm="2">
-              body
-            </Form.Label>
-            <Col sm="10">
-              <Form.Control
-                required
-                value={postObj.body}
-                onChange={({ target }) =>
-                  setPostObj({ ...postObj, body: target.value })
-                }
-              />
-            </Col>
-          </Form.Group>
+          {Object.keys(initialState).map((item) => (
+            <ModalFormField
+              postObj={postObj}
+              item={item}
+              setPostObj={setPostObj}
+              key={item}
+            />
+          ))}
           <hr />
           <Button variant="primary" type="submit">
             {modalShow.mode}

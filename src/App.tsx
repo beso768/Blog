@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Container, Toast } from "react-bootstrap";
 import "./App.css";
-import Header from "./components/header/Header";
+import Header from "./components/Header";
 import MainWrapper from "./components/MainWrapper";
 import { PostProvider } from "./state/context";
 import "./App.css";
@@ -27,7 +27,7 @@ function App() {
 
   return (
     <Container>
-      <Header modalShow={modalShow} setModalShow={setModalShow} />
+      <Header setModalShow={setModalShow} />
       <hr />
       <PostProvider>
         <MainWrapper>

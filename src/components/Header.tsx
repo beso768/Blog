@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Row } from "react-bootstrap";
 
-export default function Header({ setModalShow, modalShow }) {
+export default function Header({ setModalShow }) {
   return (
     <Row className="justify-content-between my-4">
       <h1 className="w-auto">Simple blog</h1>

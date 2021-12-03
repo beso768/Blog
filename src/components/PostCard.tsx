@@ -1,13 +1,14 @@
 import React from "react";
 import { Button, Card, Col } from "react-bootstrap";
-import { usePost } from "../state/context";
+import { usePost } from "../state/hooks/usePost";
+import { Data } from "../state/postReducer";
 
 interface PostProps {
-  data: { id: number; title: string; body: string; imgUrl?: string };
+  data: Data;
   setModalShow: React.Dispatch<React.SetStateAction<any>>;
 }
 
-const Post: React.FC<PostProps> = ({ data, setModalShow }: PostProps) => {
+const Post = ({ data, setModalShow }: PostProps) => {
   const { deletePost } = usePost();
 
   function handleDelete(id: number): void {
@@ -25,11 +26,10 @@ const Post: React.FC<PostProps> = ({ data, setModalShow }: PostProps) => {
           <Card.Title>{data.title}</Card.Title>
           <Card.Text>{data.body}</Card.Text>
           <div className="buttons">
-            {/* Post won't actually stored on fake server so we cannot edit created posts  */}
             <Button
               variant="primary"
               className="me-2"
-              disabled={data.id >= 101}
+              disabled={data.id! >= 101}
               onClick={() =>
                 setModalShow({
                   show: true,
@@ -45,7 +45,7 @@ const Post: React.FC<PostProps> = ({ data, setModalShow }: PostProps) => {
             >
               Edit
             </Button>
-            <Button variant="danger" onClick={() => handleDelete(data.id)}>
+            <Button variant="danger" onClick={() => handleDelete(data.id!)}>
               Delete
             </Button>
           </div>

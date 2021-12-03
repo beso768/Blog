@@ -1,10 +1,9 @@
 import axios from "axios";
-import { PostTypes } from "../state/actionTypes/PostTypes";
 import { Data } from "../state/postReducer";
 
 async function getPosts(): Promise<Data[]> {
   const response = await axios(
-    "https://jsonplaceholder.typicode.cm/posts?_start=0&_limit=10"
+    "https://jsonplaceholder.typicode.com/posts?_start=0&_limit=10"
   );
   return response.data;
 }
