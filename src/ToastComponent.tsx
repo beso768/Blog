@@ -3,7 +3,7 @@ import { Toast, ToastContainer } from "react-bootstrap";
 import { usePost } from "./state/hooks/usePost";
 
 export default function ToastComponent() {
-  const { posts } = usePost();
+  const [posts] = usePost();
   const [toastShow, setToastShow] = React.useState(false);
 
   React.useEffect(() => {

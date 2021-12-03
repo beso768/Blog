@@ -1,5 +1,6 @@
 import React from "react";
 import { Button, Card, Col } from "react-bootstrap";
+import { deletePost } from "../state/actionCreators/postActions";
 import { usePost } from "../state/hooks/usePost";
 import { Data } from "../state/postReducer";
 
@@ -9,10 +10,10 @@ interface PostProps {
 }
 
 const Post = ({ data, setModalShow }: PostProps) => {
-  const { deletePost } = usePost();
+  const [posts, dispatch] = usePost();
 
   function handleDelete(id: number): void {
-    deletePost(id);
+    deletePost(id, posts, dispatch);
   }
 
   return (

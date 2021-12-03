@@ -1,6 +1,7 @@
 import React from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import { ImodalShow } from "../App";
+import { addPost, editPost } from "../state/actionCreators/postActions";
 import { usePost } from "../state/hooks/usePost";
 import { Data } from "../state/postReducer";
 import ModalFormField from "./ModalFormField";
@@ -20,7 +21,7 @@ export default function CenteredModal({
   modalShow,
   setModalShow,
 }: CenteredModalProps) {
-  const { addPost, editPost } = usePost();
+  const [posts, dispatch] = usePost();
   const [postObj, setPostObj] = React.useState<Data>(initialState);
   const bootstrapModalProps = {
     show: modalShow.show,
@@ -37,9 +38,9 @@ export default function CenteredModal({
   function handleSubmit(e: { preventDefault: () => void }) {
     e.preventDefault();
     if (modalShow.mode === "Add") {
-      addPost(postObj);
+      addPost(postObj, posts, dispatch);
     } else {
-      editPost(postObj);
+      editPost(postObj, posts, dispatch);
     }
     setModalShow({ ...modalShow, show: false });
     setPostObj(initialState);

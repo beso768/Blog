@@ -5,7 +5,7 @@ import { Data } from "../state/postReducer";
 import PostCard from "./PostCard";
 
 export default function Posts({ setModalShow }) {
-  const { posts } = usePost();
+  const [posts] = usePost();
 
   return (
     <Row>

@@ -12,10 +12,10 @@ export type PostState = {
   loading: boolean;
 };
 
-export type PostAction = {
-  type: string;
-  payload?: any;
-};
+export type PostAction =
+  | { type: PostTypes.LOADING_DATA; payload: [] }
+  | { type: PostTypes.SUCCESSFULL_DATA; payload: Data[] }
+  | { type: PostTypes.ERROR_DATA; payload: string };
 
 export default function postReducer(
   posts: PostState,
@@ -32,7 +32,7 @@ export default function postReducer(
       return { error: action.payload, data: [], loading: false };
     }
     default: {
-      throw new Error(`Unsupported action type: ${action.type}`);
+      throw new Error(`Unsupported action type`);
     }
   }
 }
