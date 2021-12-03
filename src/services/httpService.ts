@@ -15,13 +15,14 @@ async function deletePostServer(id: number) {
 }
 
 async function addPostServer(newObj: Data) {
-  /* Post won't actually stored on fake server so we cannot edit created posts  */
   const response = await axios.post(
-    `https://jsonplaceholder.typicode.com/posts/`
+    `https://jsonplaceholder.typicode.com/posts/`,
+    newObj
   );
   return response.data;
 }
 async function editPostServer(newObj: Data) {
+  /* Post won't actually stored on fake server so we cannot edit created posts  */
   const response = await axios.put(
     `https://jsonplaceholder.typicode.com/posts/${newObj.id}`,
     newObj
