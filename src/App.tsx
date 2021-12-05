@@ -1,12 +1,11 @@
 import * as React from "react";
-import { Container, Toast } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import "./App.css";
 import Header from "./components/Header";
 import MainWrapper from "./components/MainWrapper";
-import { PostProvider } from "./state/context";
-import "./App.css";
-import Posts from "./components/Posts";
 import CenteredModal from "./components/Modal";
+import Posts from "./components/Posts";
+import { PostProvider } from "./state/context";
 import { Data } from "./state/postReducer";
 import ToastComponent from "./ToastComponent";
 

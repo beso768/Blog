@@ -1,13 +1,14 @@
 import React, { useEffect } from "react";
+import { Spinner } from "react-bootstrap";
 import { initializeData } from "../state/actionCreators/postActions";
 import { usePost } from "../state/hooks/usePost";
 
 export default function MainWrapper({ children }) {
-  const [, dispatch] = usePost();
+  const [posts, dispatch] = usePost();
 
   useEffect(() => {
     initializeData(dispatch);
-  }, []);
+  }, [dispatch]);
 
-  return <>{children}</>;
+  return <>{posts.loading ? <Spinner animation="grow" /> : children}</>;
 }
