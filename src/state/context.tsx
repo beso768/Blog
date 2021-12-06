@@ -18,10 +18,12 @@ export function PostProvider({ children }: PostProviderProps) {
   const [posts, dispatch] = React.useReducer<
     React.Reducer<PostState, PostAction>
   >(postReducer, initialState);
+  const value: PostContextProps = React.useMemo(
+    () => [posts, dispatch],
+    [posts, dispatch]
+  );
 
   return (
-    <PostsContext.Provider value={[posts, dispatch]}>
-      {children}
-    </PostsContext.Provider>
+    <PostsContext.Provider value={value}>{children}</PostsContext.Provider>
   );
 }

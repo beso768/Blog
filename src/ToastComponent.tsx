@@ -2,7 +2,7 @@ import React from "react";
 import { Toast, ToastContainer } from "react-bootstrap";
 import { usePost } from "./state/hooks/usePost";
 
-export default function ToastComponent() {
+function ToastComponent() {
   const [posts] = usePost();
   const [toastShow, setToastShow] = React.useState(false);
 
@@ -11,6 +11,7 @@ export default function ToastComponent() {
       setToastShow(true);
     }
   }, [posts]);
+
   return (
     <ToastContainer className="p-3" position={"top-center"}>
       <Toast
@@ -29,3 +30,4 @@ export default function ToastComponent() {
     </ToastContainer>
   );
 }
+export default React.memo(ToastComponent);

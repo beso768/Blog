@@ -23,10 +23,13 @@ export default function CenteredModal({
 }: CenteredModalProps) {
   const [posts, dispatch] = usePost();
   const [postObj, setPostObj] = React.useState<Data>(initialState);
-  const bootstrapModalProps = {
-    show: modalShow.show,
-    onHide: () => setModalShow({ ...modalShow, show: false }),
-  };
+
+  const bootstrapModalProps = React.useMemo(() => {
+    return {
+      show: modalShow.show,
+      onHide: () => setModalShow({ ...modalShow, show: false }),
+    };
+  }, [modalShow, setModalShow]);
 
   React.useEffect(() => {
     if (modalShow.post) {

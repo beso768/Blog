@@ -6,7 +6,5 @@ export function usePost() {
   if (!context) {
     throw new Error(`useCount must be used within a CountProvider`);
   }
-  // const { posts, dispatch } = context;
-
   return context;
 }
